@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ENVIRONMENT } from 'src/enums/environment';
 
 @Module({
   imports: [
@@ -19,13 +20,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
         console.log('JWT Config:', {
-          secret: config.get<string>('JWT_SECRET'),
-          expiresIn: config.get<string>('JWT_EXPIRES_IN'),
+          secret: config.get<string>(ENVIRONMENT.JWT_SECRET),
+          expiresIn: config.get<string>(ENVIRONMENT.JWT_EXPIRES_IN),
         });
         return {
-          secret: config.get<string>('JWT_SECRET') || 'super_secret_key',
+          secret: config.get<string>(ENVIRONMENT.JWT_SECRET),
           signOptions: {
-            expiresIn: config.get<string>('JWT_EXPIRES_IN') || '1d',
+            expiresIn: config.get<string>(ENVIRONMENT.JWT_EXPIRES_IN),
           },
         };
       },

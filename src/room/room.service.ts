@@ -18,19 +18,19 @@ export class RoomService {
   }
 
   findAll() {
-    return `This action returns all room`;
+    return this.roomModel.find().exec();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} room`;
   }
 
-  update(id: number, updateRoomDto: UpdateRoomDto) {
-    console.log('updateRoomDto', updateRoomDto);
-    return `This action updates a #${id} room`;
+  update(id: string, updateRoomDto: UpdateRoomDto) {
+    return this.roomModel.findByIdAndUpdate(id, updateRoomDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} room`;
+  remove(id: string) {
+    const deleteRoom = this.roomModel.findByIdAndDelete(id);
+    return deleteRoom;
   }
 }

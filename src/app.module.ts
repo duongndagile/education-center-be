@@ -12,19 +12,21 @@ import { LessionModule } from './lession/lession.module';
 import { RolesGuard } from './common/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { ENVIRONMENT } from './enums/environment';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.cwd() + '/.env',
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => {
+        console.log(config.get<string>(ENVIRONMENT.MONGODB_URL));
         return {
-          uri:
-            config.get<string>(process.env.MONGODB_URL ?? '') ||
-            'mongodb://root:example@localhost:27017/cms?authSource=admin',
+          uri: config.get<string>(ENVIRONMENT.MONGODB_URL),
+          dbName: config.get<string>(ENVIRONMENT.DB_NAME),
         };
       },
       inject: [ConfigService],
