@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Class, ClassDocument } from 'libs/mongo/schemas';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ClassService {
+  constructor(
+    @InjectModel(Class.name)
+    private classModel: Model<ClassDocument>,
+  ) {}
+
   create(createClassDto: CreateClassDto) {
-    console.log('createClassDto', createClassDto);
-    return 'This action adds a new class';
+    return this.classModel.create(createClassDto);
   }
 
   findAll() {
-    return `This action returns all class`;
+    return this.classModel.find().exec();
   }
 
   findOne(id: number) {
@@ -18,11 +25,10 @@ export class ClassService {
   }
 
   update(id: number, updateClassDto: UpdateClassDto) {
-    console.log('updateClassDto', updateClassDto);
-    return `This action updates a #${id} class`;
+    return this.classModel.findByIdAndUpdate(id, updateClassDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} class`;
+    return this.classModel.findByIdAndDelete(id);
   }
 }
