@@ -27,6 +27,8 @@ import { ENVIRONMENT } from './enums/environment';
         return {
           uri: config.get<string>(ENVIRONMENT.MONGODB_URL),
           dbName: config.get<string>(ENVIRONMENT.DB_NAME),
+          user: config.get<string>(ENVIRONMENT.MONGODB_USERNAME),
+          pass: config.get<string>(ENVIRONMENT.MONGODB_PASSWORD),
         };
       },
       inject: [ConfigService],
