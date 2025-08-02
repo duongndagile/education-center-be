@@ -10,9 +10,27 @@ services:
       - localdbdata:/data/db
     ports:
       - '27017:27017'
+    networks:
+      - education
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    networks:
+      - education
 
 volumes:
   localdbdata:
     driver: local
   educationredisdata:
     driver: local
+
+networks:
+  education:
+    driver: bridge
